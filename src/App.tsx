@@ -12,6 +12,7 @@ import BubsNode from './components/BubsNode'
 import InfoPanel from './components/InfoPanel'
 import Navigation from './components/Navigation'
 import MobileView from './components/MobileView'
+import PrintView from './components/PrintView'
 import { slides } from './data/slides'
 import { SLIDE_TITLES } from './constants/content'
 import type { Node } from '@xyflow/react'
@@ -59,6 +60,7 @@ export default function App() {
 
   // PDF export
   const handleExportPDF = useCallback(() => {
+    alert('Tip: Set Layout to "Landscape" and check "Background graphics" for full color.')
     window.print()
   }, [])
 
@@ -68,6 +70,8 @@ export default function App() {
 
   return (
     <div className="w-screen h-screen bg-bubs-cream">
+      <PrintView />
+      <div className="screen-only w-full h-full">
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -90,7 +94,7 @@ export default function App() {
       <div className="absolute top-4 left-4 z-50 no-print">
         <div className="info-panel rounded-2xl p-4 flex items-center gap-3">
           <img
-            src={import.meta.env.BASE_URL + 'bubs-logo-nogb.png'}
+            src={import.meta.env.BASE_URL + 'logo-light-theme.png'}
             alt="BUBS"
             className="h-8"
           />
@@ -108,7 +112,7 @@ export default function App() {
           <span className="text-bubs-brown/70">Click</span> nodes for details ·{' '}
           <span className="text-bubs-brown/70">Scroll</span> to zoom ·{' '}
           <button onClick={handleExportPDF} className="text-bubs-pink hover:underline">
-            Export PDF
+            Export PDF (Landscape)
           </button>
         </div>
       </div>
@@ -122,6 +126,7 @@ export default function App() {
         onNavigate={goToSlide}
         total={slides.length}
       />
+      </div>
     </div>
   )
 }

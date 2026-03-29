@@ -9,7 +9,7 @@ export default function BubsNode({ data, selected }: { data: any; selected?: boo
     return (
       <div className="flex flex-col items-center">
         <img
-          src={import.meta.env.BASE_URL + 'bubs-logo-nogb.png'}
+          src={import.meta.env.BASE_URL + 'logo-light-theme.png'}
           alt="Hello BUBS"
           className="w-48 h-auto"
         />
@@ -371,7 +371,7 @@ export default function BubsNode({ data, selected }: { data: any; selected?: boo
         <Handle type="target" position={Position.Top} className="opacity-0" />
         <div className="text-sm uppercase tracking-wider text-white/70 mb-2">Raising</div>
         <div className="text-5xl font-extrabold">{data.amount}</div>
-        <div className="text-sm text-white/70 mt-2">Pre-Seed Round</div>
+        <div className="text-sm text-white/70 mt-2">Friends & Family Round</div>
         <Handle type="source" position={Position.Bottom} className="opacity-0" />
       </div>
     )

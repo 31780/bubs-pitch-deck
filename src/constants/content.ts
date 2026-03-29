@@ -32,31 +32,31 @@ export const TITLE = {
 // ── Slide 1: Problem ────────────────────────────────────────
 export const PROBLEM = {
   heading: 'The Problem',
-  subheading: 'Parents face real friction when buying & selling kids\' items',
+  subheading: 'Challenges faced by parents today',
   painPoints: [
     {
       id: 'outgrow',
       icon: '📏',
-      title: 'Kids Outgrow Fast',
-      description: 'Children outgrow clothes and gear every 3-6 months. Families spend $12,000+ on items used for weeks.',
+      title: 'Accumulation',
+      description: 'Parents accumulate children\'s items that are quickly outgrown but remain in good condition — sitting unused in closets.',
     },
     {
-      id: 'waste',
-      icon: '🗑️',
-      title: 'Landfill Waste',
-      description: '9.5M tons of kids\' items end up in landfill annually. Most still in great condition.',
+      id: 'time',
+      icon: '⏳',
+      title: 'Time-Consuming',
+      description: 'Finding quality second-hand kids\' items is time-consuming and often unreliable for busy parents.',
     },
     {
       id: 'trust',
       icon: '🔒',
       title: 'No Trusted Platform',
-      description: 'No dedicated peer-to-peer marketplace exists for parents. Current options are generic and lack safety features.',
+      description: 'No dedicated peer-to-peer marketplace exists for parents. Existing options are generic and lack parent-focused safety features.',
     },
     {
       id: 'safety',
       icon: '⚠️',
       title: 'Safety Concerns',
-      description: 'Facebook Marketplace lacks identity verification, escrow payments, and parent-focused community features.',
+      description: 'Facebook Marketplace lacks identity verification and escrow payments. Parents face scams and interact with unknown sellers.',
     },
   ],
 }
@@ -64,25 +64,25 @@ export const PROBLEM = {
 // ── Slide 2: Market Size ────────────────────────────────────
 export const MARKET = {
   heading: 'Market Opportunity',
-  subheading: 'The secondhand kids\' market is massive and growing',
-  tam: { label: 'TAM', value: '$35B', description: 'Global secondhand kids\' market' },
-  sam: { label: 'SAM', value: '$8B', description: 'US & UK online resale for kids' },
-  som: { label: 'SOM', value: '$200M', description: 'Addressable in first 3 years' },
+  subheading: 'The US kids\' resale market is booming — growing 5x faster than retail',
+  tam: { label: 'TAM', value: '$55B', description: 'US children\'s apparel market (2025)' },
+  sam: { label: 'SAM', value: '$9B', description: 'US kids & baby resale market' },
+  som: { label: 'SOM', value: '$200M', description: 'Online P2P marketplace share, first 3 years' },
   stats: [
-    { value: '15%', label: 'YoY market growth' },
-    { value: '73%', label: 'of parents buy secondhand' },
-    { value: '2x', label: 'growth post-pandemic' },
+    { value: '59%', label: 'of US parents buy secondhand' },
+    { value: '14%', label: 'YoY resale market growth' },
+    { value: '23%', label: 'online resale growth in 2024' },
   ],
 }
 
 // ── Slide 3: Solution ───────────────────────────────────────
 export const SOLUTION = {
   heading: 'The BUBS Solution',
-  subheading: 'A purpose-built platform for the parenting community',
+  subheading: 'A dedicated P2P marketplace with built-in verification, community forums, expert blogs, and local parent groups',
   core: {
     id: 'bubs-core',
     title: 'BUBS Platform',
-    description: 'All-in-one marketplace designed exclusively for parents',
+    description: 'Secure marketplace + parenting community — built by parents, for parents',
   },
   features: [
     {
@@ -199,10 +199,8 @@ export const TRACTION = {
   metrics: [
     { id: 'appstore', icon: '📱', value: 'Live', label: 'iOS App on App Store' },
     { id: 'webapp', icon: '💻', value: 'Live', label: 'Web App launched' },
-    { id: 'users', icon: '👥', value: '500+', label: 'Registered users' },
-    { id: 'listings', icon: '📦', value: '1,200+', label: 'Items listed' },
+    { id: 'users', icon: '👥', value: '200+', label: 'Registered users' },
     { id: 'forum', icon: '💬', value: 'Active', label: 'Community forum engagement' },
-    { id: 'rating', icon: '⭐', value: '4.8', label: 'App Store rating' },
   ],
 }
 
@@ -245,30 +243,40 @@ export const REVENUE = {
 // ── Slide 9: Competitive Landscape ──────────────────────────
 export const COMPETITION = {
   heading: 'Competitive Landscape',
-  subheading: 'BUBS uniquely combines trust and community for parents',
+  subheading: 'BUBS uniquely combines trust, safety, and community for parents',
   axes: { x: 'Community Focus →', y: 'Trust & Safety →' },
   competitors: [
     { id: 'bubs', name: 'BUBS', x: 0.85, y: 0.9, highlight: true },
     { id: 'fb', name: 'Facebook Marketplace', x: 0.3, y: 0.2 },
-    { id: 'ebay', name: 'eBay', x: 0.15, y: 0.5 },
-    { id: 'kidizen', name: 'Kidizen', x: 0.6, y: 0.6 },
-    { id: 'mercari', name: 'Mercari', x: 0.25, y: 0.45 },
-    { id: 'poshmark', name: 'Poshmark', x: 0.5, y: 0.5 },
+    { id: 'mercari', name: 'Mercari', x: 0.2, y: 0.45 },
+    { id: 'recess', name: 'Recess', x: 0.65, y: 0.5 },
+    { id: 'poshmark', name: 'Poshmark', x: 0.45, y: 0.5 },
   ],
 }
 
 // ── Slide 10: Team ──────────────────────────────────────────
 export const TEAM = {
   heading: 'Our Team',
-  subheading: 'Passionate builders and parents',
+  subheading: 'Combined expertise in technology, sustainability, and parenting',
   members: [
     {
-      id: 'founder1',
-      name: 'Nino',
-      role: 'Founder & CEO',
+      id: 'david',
+      name: 'David Ninobla',
+      role: 'CEO / Founder / Engineer',
       bio: 'Full-stack engineer. Built BUBS from the ground up — Flutter, React, Express, Supabase.',
     },
-    // Add more team members here
+    {
+      id: 'eric',
+      name: 'Eric Sanchez',
+      role: 'COO / CFO',
+      bio: 'Operations and finance. Driving sustainable growth and financial strategy.',
+    },
+    {
+      id: 'richard',
+      name: 'Richard Welch III',
+      role: 'CMO / CRO',
+      bio: 'Marketing and revenue. Building brand awareness and user acquisition strategies.',
+    },
   ],
 }
 
@@ -315,13 +323,13 @@ export const ROADMAP = {
 // ── Slide 12: The Ask ───────────────────────────────────────
 export const THE_ASK = {
   heading: 'The Ask',
-  subheading: 'Pre-seed round to accelerate growth',
+  subheading: 'Friends & family round to accelerate growth',
   amount: '$250K',
   allocation: [
-    { id: 'eng', label: 'Engineering', percent: 40, description: 'Android app, AI features, platform scaling' },
-    { id: 'marketing', label: 'Marketing', percent: 30, description: 'User acquisition, brand partnerships, content' },
+    { id: 'marketing', label: 'Marketing', percent: 45, description: 'User acquisition, brand partnerships, content, social media' },
+    { id: 'eng', label: 'Engineering', percent: 30, description: 'Android app, AI features, platform scaling' },
     { id: 'ops', label: 'Operations', percent: 15, description: 'Customer support, community management' },
-    { id: 'legal', label: 'Legal & Compliance', percent: 15, description: 'Trust & safety infrastructure, regulatory' },
+    { id: 'legal', label: 'Legal & Compliance', percent: 10, description: 'Trust & safety infrastructure, regulatory' },
   ],
   contact: {
     email: 'hello@hello-bubs.com',

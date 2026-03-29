@@ -32,7 +32,7 @@ export default function MobileView() {
   const slideContent = [
     // 0: Title
     <div key="title" className="text-center py-8">
-      <img src={import.meta.env.BASE_URL + 'bubs-logo-nogb.png'} alt="Hello BUBS" className="w-32 mx-auto mb-4" />
+      <img src={import.meta.env.BASE_URL + 'logo-light-theme.png'} alt="Hello BUBS" className="w-32 mx-auto mb-4" />
       <h1 className="text-2xl font-extrabold text-bubs-brown mb-2">{TITLE.heading}</h1>
       <p className="text-bubs-brown/70 mb-6">{TITLE.subheading}</p>
       <div className="flex flex-col gap-2">
@@ -209,7 +209,7 @@ export default function MobileView() {
       <div className="bg-bubs-pink text-white rounded-xl p-6 text-center mb-4">
         <div className="text-xs uppercase tracking-wider text-white/70">Raising</div>
         <div className="text-4xl font-extrabold">{THE_ASK.amount}</div>
-        <div className="text-sm text-white/70">Pre-Seed Round</div>
+        <div className="text-sm text-white/70">Friends & Family Round</div>
       </div>
       {THE_ASK.allocation.map(a => (
         <div key={a.id} className="bg-white rounded-xl p-4 border border-bubs-border mb-3">
@@ -238,7 +238,7 @@ export default function MobileView() {
       {/* Header */}
       <header className="sticky top-0 z-50 bg-bubs-cream/95 backdrop-blur-sm border-b border-bubs-border p-3">
         <div className="flex items-center justify-between">
-          <img src={import.meta.env.BASE_URL + 'bubs-logo-nogb.png'} alt="BUBS" className="h-8" />
+          <img src={import.meta.env.BASE_URL + 'logo-light-theme.png'} alt="BUBS" className="h-8" />
           <div className="text-xs text-bubs-brown/50">{activeSlide + 1}/{SLIDE_TITLES.length}</div>
         </div>
         {/* Slide tabs */}

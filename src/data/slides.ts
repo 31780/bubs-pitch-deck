@@ -295,7 +295,7 @@ function teamSlide(): { nodes: Node[]; edges: Edge[] } {
         description: TEAM.subheading,
       }),
       ...TEAM.members.map((m, i) =>
-        n(m.id, 250 + (i % 3) * 220, 180 + Math.floor(i / 3) * 220, {
+        n(m.id, 80 + i * 260, 180, {
           variant: 'team-member',
           name: m.name,
           role: m.role,
