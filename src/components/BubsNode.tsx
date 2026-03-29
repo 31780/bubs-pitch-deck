@@ -154,10 +154,13 @@ export default function BubsNode({ data, selected }: { data: any; selected?: boo
 
   // ── Step (user journey) ───────────────────────────────────
   if (variant === 'step') {
+    const highlighted = selected || data.autoHighlight
     return (
       <div
-        className={`bg-white rounded-2xl p-4 border-2 w-[130px] text-center transition-all duration-200 hover:scale-105 ${
-          selected ? 'border-bubs-pink shadow-lg' : 'border-bubs-border'
+        className={`bg-white rounded-2xl p-4 border-2 w-[130px] text-center transition-all duration-500 hover:scale-105 ${
+          highlighted
+            ? 'border-bubs-pink shadow-lg shadow-bubs-pink/15 scale-105'
+            : 'border-bubs-border opacity-60'
         }`}
       >
         <Handle type="target" position={Position.Left} className="opacity-0" />

@@ -103,6 +103,42 @@ export default function App() {
     }))
   }, [expandedLayers, currentSlide])
 
+  // Auto-highlight user journey steps (slide 4)
+  useEffect(() => {
+    if (currentSlide !== 4) return
+    const stepNodes = slideNodes.filter(n => n.data.variant === 'step')
+    if (stepNodes.length === 0) return
+
+    // Start all steps unhighlighted
+    setSlideNodes(prev => prev.map(n => {
+      if (n.data.variant !== 'step') return n
+      return { ...n, data: { ...n.data, autoHighlight: false } }
+    }))
+    setSelectedNode(null)
+
+    let step = 0
+    const timer = setInterval(() => {
+      if (step < stepNodes.length) {
+        const node = stepNodes[step]
+        setSelectedNode(node)
+        const currentStep = step
+        setSlideNodes(prev => prev.map(n => {
+          if (n.data.variant !== 'step') return n
+          const idx = stepNodes.findIndex(s => s.id === n.id)
+          return {
+            ...n,
+            data: { ...n.data, autoHighlight: idx <= currentStep },
+          }
+        }))
+        step++
+      } else {
+        clearInterval(timer)
+      }
+    }, 1500)
+
+    return () => clearInterval(timer)
+  }, [currentSlide, slideNodes.length]) // eslint-disable-line react-hooks/exhaustive-deps
+
   // Keyboard navigation
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
