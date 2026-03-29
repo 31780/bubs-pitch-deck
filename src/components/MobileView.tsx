@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   BRAND, TITLE, PROBLEM, MARKET, SOLUTION, PRODUCT,
   MARKETPLACE_MODEL, TECH_STACK, TRACTION, REVENUE,
@@ -11,6 +11,102 @@ function SlideCard({ title, children }: { title: string; children: React.ReactNo
       <h2 className="text-xl font-bold text-bubs-brown mb-4 px-1">{title}</h2>
       {children}
     </section>
+  )
+}
+
+function MobileProductSlide({ active }: { active: boolean }) {
+  const [highlightedStep, setHighlightedStep] = useState(-1)
+
+  useEffect(() => {
+    if (!active) return
+    setHighlightedStep(-1)
+    const timers: ReturnType<typeof setTimeout>[] = []
+    PRODUCT.steps.forEach((_, i) => {
+      timers.push(setTimeout(() => setHighlightedStep(i), 800 + i * 1500))
+    })
+    return () => timers.forEach(t => clearTimeout(t))
+  }, [active])
+
+  return (
+    <SlideCard title={PRODUCT.heading}>
+      <p className="text-sm text-bubs-brown/60 mb-4">{PRODUCT.subheading}</p>
+      {PRODUCT.steps.map((s, i) => (
+        <div
+          key={s.id}
+          className={`flex items-start gap-3 mb-3 p-2 rounded-xl transition-all duration-500 ${
+            i <= highlightedStep
+              ? 'bg-bubs-pink/5 border border-bubs-pink shadow-sm'
+              : 'opacity-40 border border-transparent'
+          }`}
+        >
+          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0 transition-all duration-500 ${
+            i <= highlightedStep ? 'bg-bubs-pink text-white' : 'bg-bubs-pink/10 text-bubs-pink'
+          }`}>
+            {i + 1}
+          </div>
+          <div>
+            <h4 className="font-bold text-sm text-bubs-brown">{s.icon} {s.title}</h4>
+            <p className="text-xs text-bubs-brown/70">{s.description}</p>
+          </div>
+        </div>
+      ))}
+    </SlideCard>
+  )
+}
+
+function MobileCompetitionSlide({ active }: { active: boolean }) {
+  const [visibleCount, setVisibleCount] = useState(0)
+  // Sort by y ascending (lowest safety first), BUBS always last
+  const sorted = [...COMPETITION.competitors].sort((a, b) => {
+    if (a.highlight) return 1
+    if (b.highlight) return -1
+    return a.y - b.y
+  })
+
+  useEffect(() => {
+    if (!active) return
+    setVisibleCount(0)
+    const timers: ReturnType<typeof setTimeout>[] = []
+    sorted.forEach((_, i) => {
+      timers.push(setTimeout(() => setVisibleCount(i + 1), 500 + i * 600))
+    })
+    return () => timers.forEach(t => clearTimeout(t))
+  }, [active]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Reverse so lowest-ranked at bottom, BUBS on top — animate from bottom up
+  const reversed = [...sorted].reverse()
+
+  return (
+    <SlideCard title={COMPETITION.heading}>
+      <p className="text-sm text-bubs-brown/60 mb-4">{COMPETITION.subheading}</p>
+      {reversed.map((c, i) => {
+        // Animation index: bottom items appear first
+        const animIndex = reversed.length - 1 - i
+        return (
+          <div
+            key={c.id}
+            className={`flex items-center gap-3 mb-2 p-3 rounded-xl transition-all duration-500 ${
+              animIndex < visibleCount ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+            } ${
+              c.highlight && animIndex < visibleCount
+                ? 'bg-bubs-pink/10 border-2 border-bubs-pink scale-105'
+                : c.highlight
+                ? 'border-2 border-transparent'
+                : 'bg-white border border-bubs-border'
+            }`}
+          >
+            <div className={`rounded-full flex items-center justify-center text-xs font-bold transition-all duration-500 ${
+              c.highlight
+                ? 'w-10 h-10 bg-bubs-pink text-white shadow-lg shadow-bubs-pink/30'
+                : 'w-8 h-8 bg-bubs-border text-bubs-brown'
+            }`}>
+              {c.name.charAt(0)}
+            </div>
+            <span className={`text-sm font-medium ${c.highlight ? 'text-bubs-pink font-bold' : 'text-bubs-brown'}`}>{c.name}</span>
+          </div>
+        )
+      })}
+    </SlideCard>
   )
 }
 
@@ -87,20 +183,7 @@ export default function MobileView() {
     </SlideCard>,
 
     // 4: Product
-    <SlideCard key="product" title={PRODUCT.heading}>
-      <p className="text-sm text-bubs-brown/60 mb-4">{PRODUCT.subheading}</p>
-      {PRODUCT.steps.map((s, i) => (
-        <div key={s.id} className="flex items-start gap-3 mb-3">
-          <div className="w-8 h-8 rounded-full bg-bubs-pink/10 flex items-center justify-center text-sm font-bold text-bubs-pink shrink-0">
-            {i + 1}
-          </div>
-          <div>
-            <h4 className="font-bold text-sm text-bubs-brown">{s.icon} {s.title}</h4>
-            <p className="text-xs text-bubs-brown/70">{s.description}</p>
-          </div>
-        </div>
-      ))}
-    </SlideCard>,
+    <MobileProductSlide key={`product-${activeSlide === 4}`} active={activeSlide === 4} />,
 
     // 5: Marketplace Model
     <SlideCard key="model" title={MARKETPLACE_MODEL.heading}>
@@ -156,17 +239,7 @@ export default function MobileView() {
     </SlideCard>,
 
     // 9: Competition
-    <SlideCard key="competition" title={COMPETITION.heading}>
-      <p className="text-sm text-bubs-brown/60 mb-4">{COMPETITION.subheading}</p>
-      {COMPETITION.competitors.map(c => (
-        <div key={c.id} className={`flex items-center gap-3 mb-2 p-3 rounded-xl ${c.highlight ? 'bg-bubs-pink/10 border border-bubs-pink' : 'bg-white border border-bubs-border'}`}>
-          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${c.highlight ? 'bg-bubs-pink text-white' : 'bg-bubs-border text-bubs-brown'}`}>
-            {c.name.charAt(0)}
-          </div>
-          <span className={`text-sm font-medium ${c.highlight ? 'text-bubs-pink' : 'text-bubs-brown'}`}>{c.name}</span>
-        </div>
-      ))}
-    </SlideCard>,
+    <MobileCompetitionSlide key={`competition-${activeSlide === 9}`} active={activeSlide === 9} />,
 
     // 10: Team
     <SlideCard key="team" title={TEAM.heading}>
