@@ -263,7 +263,7 @@ export const TEAM = {
       id: 'david',
       name: 'David Ninobla',
       role: 'CEO / Founder / Engineer',
-      bio: 'Full-stack engineer. Built BUBS from the ground up — Flutter, React, Express, Supabase.',
+      bio: 'Engineer. Built BUBS from the ground up — Flutter, React, Express, Supabase.',
     },
     {
       id: 'eric',

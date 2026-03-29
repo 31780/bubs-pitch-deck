@@ -19,12 +19,24 @@ import type { Node } from '@xyflow/react'
 
 const nodeTypes = { bubsNode: BubsNode }
 
+// Filter out hidden nodes and their edges
+function visibleSlice(allNodes: Node[], allEdges: import('@xyflow/react').Edge[]) {
+  const visible = allNodes.filter(n => !n.data.hidden)
+  const visibleIds = new Set(visible.map(n => n.id))
+  const edges = allEdges.filter(e => visibleIds.has(e.source) && visibleIds.has(e.target))
+  return { nodes: visible, edges }
+}
+
 export default function App() {
   const [currentSlide, setCurrentSlide] = useState(0)
-  const [nodes, setNodes, onNodesChange] = useNodesState(slides[0].nodes)
-  const [edges, setEdges, onEdgesChange] = useEdgesState(slides[0].edges)
+  const [slideNodes, setSlideNodes] = useState(slides[0].nodes)
+  const [slideEdges, setSlideEdges] = useState(slides[0].edges)
+  const filtered = visibleSlice(slideNodes, slideEdges)
+  const [nodes, setNodes, onNodesChange] = useNodesState(filtered.nodes)
+  const [edges, setEdges, onEdgesChange] = useEdgesState(filtered.edges)
   const [selectedNode, setSelectedNode] = useState<Node | null>(null)
   const [isMobile, setIsMobile] = useState(false)
+  const [expandedLayers, setExpandedLayers] = useState<Set<string>>(new Set())
 
   // Check mobile
   useEffect(() => {
@@ -34,14 +46,62 @@ export default function App() {
     return () => window.removeEventListener('resize', check)
   }, [])
 
+  // Sync visible nodes when slideNodes change
+  useEffect(() => {
+    const { nodes: vn, edges: ve } = visibleSlice(slideNodes, slideEdges)
+    setNodes(vn)
+    setEdges(ve)
+  }, [slideNodes, slideEdges, setNodes, setEdges])
+
   // Navigate to slide
   const goToSlide = useCallback((index: number) => {
     if (index < 0 || index >= slides.length) return
     setCurrentSlide(index)
-    setNodes(slides[index].nodes)
-    setEdges(slides[index].edges)
+    setSlideNodes(slides[index].nodes)
+    setSlideEdges(slides[index].edges)
     setSelectedNode(null)
-  }, [setNodes, setEdges])
+    setExpandedLayers(new Set())
+  }, [])
+
+  // Handle tech layer toggle
+  const handleNodeClick = useCallback((_e: React.MouseEvent, node: Node) => {
+    setSelectedNode(node)
+
+    // Tech layer expand/collapse
+    if (node.data.variant === 'tech-layer' && node.data.layerId) {
+      const layerId = node.data.layerId as string
+      setExpandedLayers(prev => {
+        const next = new Set(prev)
+        if (next.has(layerId)) {
+          next.delete(layerId)
+        } else {
+          next.add(layerId)
+        }
+        return next
+      })
+    }
+  }, [])
+
+  // Update tech item visibility and layer hints when layers toggle
+  useEffect(() => {
+    if (currentSlide !== 6) return // only tech stack slide
+    setSlideNodes(prev => prev.map(node => {
+      if (node.data.variant === 'tech-item' && node.data.parentLayer) {
+        return {
+          ...node,
+          data: { ...node.data, hidden: !expandedLayers.has(node.data.parentLayer as string) },
+        }
+      }
+      if (node.data.variant === 'tech-layer' && node.data.layerId) {
+        const isExpanded = expandedLayers.has(node.data.layerId as string)
+        return {
+          ...node,
+          data: { ...node.data, hint: isExpanded ? 'click to collapse' : `click to reveal` },
+        }
+      }
+      return node
+    }))
+  }, [expandedLayers, currentSlide])
 
   // Keyboard navigation
   useEffect(() => {
@@ -77,7 +137,7 @@ export default function App() {
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
-        onNodeClick={(_e, node) => setSelectedNode(node)}
+        onNodeClick={handleNodeClick}
         onPaneClick={() => setSelectedNode(null)}
         nodeTypes={nodeTypes}
         fitView

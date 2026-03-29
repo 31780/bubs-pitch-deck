@@ -94,9 +94,11 @@ export default function BubsNode({ data, selected }: { data: any; selected?: boo
       medium: 'bg-bubs-pink/20 border-bubs-pink/50',
       small: 'bg-bubs-pink/40 border-bubs-pink',
     }
+    const delay = typeof data.stagger === 'number' ? `${(data.stagger as number) * 0.4}s` : '0s'
     return (
       <div
-        className={`${sizeMap[data.size]} ${bgMap[data.size]} rounded-full border-2 flex flex-col items-center justify-center text-center`}
+        className={`${sizeMap[data.size]} ${bgMap[data.size]} rounded-full border-2 flex flex-col items-center justify-center text-center animate-scaleIn`}
+        style={{ animationDelay: delay }}
       >
         <Handle type="target" position={Position.Top} className="opacity-0" />
         <div className="text-xs font-bold text-bubs-pink uppercase tracking-wider">{data.label}</div>
@@ -109,8 +111,12 @@ export default function BubsNode({ data, selected }: { data: any; selected?: boo
 
   // ── Stat ──────────────────────────────────────────────────
   if (variant === 'stat') {
+    const delay = typeof data.stagger === 'number' ? `${(data.stagger as number) * 0.4}s` : '0s'
     return (
-      <div className="bg-white rounded-xl p-4 border border-bubs-border text-center min-w-[160px]">
+      <div
+        className="bg-white rounded-xl p-4 border border-bubs-border text-center min-w-[160px] animate-popIn"
+        style={{ animationDelay: delay }}
+      >
         <div className="text-3xl font-extrabold text-bubs-pink">{data.value}</div>
         <div className="text-sm text-bubs-brown/70 mt-1">{data.label}</div>
       </div>
@@ -203,9 +209,12 @@ export default function BubsNode({ data, selected }: { data: any; selected?: boo
   // ── Tech layer header ─────────────────────────────────────
   if (variant === 'tech-layer') {
     return (
-      <div className="bg-bubs-pink/10 rounded-xl px-5 py-3 border border-bubs-pink/30 min-w-[180px] text-center">
+      <div className="bg-bubs-pink/10 rounded-xl px-5 py-3 border border-bubs-pink/30 min-w-[180px] text-center cursor-pointer hover:bg-bubs-pink/20 transition-all">
         <Handle type="target" position={Position.Left} className="opacity-0" />
         <span className="font-bold text-bubs-pink text-sm uppercase tracking-wider">{data.label}</span>
+        {data.hint && (
+          <div className="text-[10px] text-bubs-brown/40 mt-1">{data.hint as string}</div>
+        )}
         <Handle type="source" position={Position.Right} className="opacity-0" />
       </div>
     )
@@ -214,7 +223,7 @@ export default function BubsNode({ data, selected }: { data: any; selected?: boo
   // ── Tech item ─────────────────────────────────────────────
   if (variant === 'tech-item') {
     return (
-      <div className="bg-white rounded-xl p-4 border border-bubs-border min-w-[180px]">
+      <div className="bg-white rounded-xl p-4 border border-bubs-border min-w-[180px] animate-popIn">
         <Handle type="target" position={Position.Top} className="opacity-0" />
         <div className="font-bold text-bubs-brown text-sm">{data.name}</div>
         <div className="text-xs text-bubs-brown/60">{data.detail}</div>
@@ -275,6 +284,12 @@ export default function BubsNode({ data, selected }: { data: any; selected?: boo
     const competitors = data.competitors as Array<{
       id: string; name: string; x: number; y: number; highlight?: boolean
     }>
+    // Sort: non-highlighted by x position (left→right), highlighted (BUBS) always last
+    const sorted = [...competitors].sort((a, b) => {
+      if (a.highlight) return 1
+      if (b.highlight) return -1
+      return a.x - b.x
+    })
     return (
       <div className="bg-white rounded-2xl p-6 border border-bubs-border" style={{ width: 620, height: 420 }}>
         {/* Axes */}
@@ -284,28 +299,30 @@ export default function BubsNode({ data, selected }: { data: any; selected?: boo
           <div className="absolute bottom-[-24px] left-1/2 text-xs text-bubs-brown/60">{data.axes.x}</div>
           <div className="absolute top-1/2 left-[-8px] text-xs text-bubs-brown/60 -rotate-90 origin-center whitespace-nowrap">{data.axes.y}</div>
 
-          {competitors.map((c: { id: string; name: string; x: number; y: number; highlight?: boolean }) => (
+          {sorted.map((c, i) => (
             <div
               key={c.id}
-              className="absolute flex flex-col items-center"
+              className={`absolute flex flex-col items-center ${
+                c.highlight ? 'animate-plotDropBubs' : 'animate-plotDrop'
+              }`}
               style={{
                 left: `${8 + c.x * 85}%`,
                 bottom: `${c.y * 85}%`,
-                transform: 'translate(-50%, 50%)',
+                animationDelay: `${c.highlight ? (sorted.length - 1) * 0.5 + 0.3 : i * 0.5}s`,
               }}
             >
               <div
-                className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold ${
+                className={`rounded-full flex items-center justify-center font-bold ${
                   c.highlight
-                    ? 'bg-bubs-pink text-white shadow-lg shadow-bubs-pink/30 scale-125'
-                    : 'bg-bubs-border text-bubs-brown'
+                    ? 'w-14 h-14 text-sm bg-bubs-pink text-white shadow-xl shadow-bubs-pink/40'
+                    : 'w-10 h-10 text-xs bg-bubs-border text-bubs-brown'
                 }`}
               >
                 {c.name.charAt(0)}
               </div>
               <span
                 className={`text-xs mt-1 whitespace-nowrap ${
-                  c.highlight ? 'font-bold text-bubs-pink' : 'text-bubs-brown/70'
+                  c.highlight ? 'font-bold text-bubs-pink text-sm' : 'text-bubs-brown/70'
                 }`}
               >
                 {c.name}

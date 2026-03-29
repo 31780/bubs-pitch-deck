@@ -81,11 +81,11 @@ function marketSlide(): { nodes: Node[]; edges: Edge[] } {
         title: MARKET.heading,
         description: MARKET.subheading,
       }),
-      n('tam', 80, 160, { variant: 'market-circle', ...MARKET.tam, size: 'large' }),
-      n('sam', 330, 180, { variant: 'market-circle', ...MARKET.sam, size: 'medium' }),
-      n('som', 540, 200, { variant: 'market-circle', ...MARKET.som, size: 'small' }),
+      n('tam', 80, 160, { variant: 'market-circle', ...MARKET.tam, size: 'large', stagger: 0 }),
+      n('sam', 330, 180, { variant: 'market-circle', ...MARKET.sam, size: 'medium', stagger: 1 }),
+      n('som', 540, 200, { variant: 'market-circle', ...MARKET.som, size: 'small', stagger: 2 }),
       ...MARKET.stats.map((s, i) =>
-        n(`stat-${i}`, 100 + i * 260, 520, { variant: 'stat', ...s })
+        n(`stat-${i}`, 100 + i * 260, 520, { variant: 'stat', ...s, stagger: 3 + i })
       ),
     ],
     edges: [
@@ -190,14 +190,19 @@ function techStackSlide(): { nodes: Node[]; edges: Edge[] } {
     nodes.push(n(layerId, 50 + li * 210, 160, {
       variant: 'tech-layer',
       label: layer.label,
+      layerId: layer.id,
+      hint: `${layer.items.length} items — click to reveal`,
     }))
 
+    // Items start hidden — App.tsx will add them on click
     layer.items.forEach((item, ii) => {
       const itemId = `tech-${item.id}`
       nodes.push(n(itemId, 50 + li * 210, 260 + ii * 140, {
         variant: 'tech-item',
         name: item.name,
         detail: item.detail,
+        parentLayer: layer.id,
+        hidden: true,
       }))
       edges.push(e(`e-${layerId}-${itemId}`, layerId, itemId, {
         animated: false,
